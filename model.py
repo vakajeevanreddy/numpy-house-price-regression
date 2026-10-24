@@ -200,20 +200,37 @@ def make_train_val_test(X, y, train_ratio, val_ratio, seed):
     # TODO: Shuffle and materialize train/validation/test matrices from X and y...
     indices = make_shuffled_indices(len(y),seed)
     train_idx,val_idx,test_idx = partition_indices(indices,train_ratio,val_ratio)
-    x_val,y_val = subset_xy(X,y,val_idx)
-    x_train,y_train = subset_xy(X,y,train_idx)
-    x_test,y_test = subset_xy(X,y,test_idx)
+    X_val,y_val = subset_xy(X,y,val_idx)
+    X_train,y_train = subset_xy(X,y,train_idx)
+    X_test,y_test = subset_xy(X,y,test_idx)
     return{
-        "X_train" : x_train,
+        "X_train" : X_train,
         "y_train" : y_train,
-        "X_val" : x_val,
+        "X_val" : X_val,
         "y_val" :y_val,
-        "X_test" : x_test,
+        "X_test" : X_test,
         "y_test" : y_test
     }
 
-# Step 22 - standardize_and_add_bias (not yet solved)
-# TODO: implement
+# Step 22 - standardize_and_add_bias
+def standardize_and_add_bias(splits):
+    # TODO: Fit standardizer on train, transform all splits, prepend bias...
+    mean,std = fit_standardizer(splits['X_train'])
+
+    X_train = apply_standardizer(splits['X_train'],mean,std)
+    X_val = apply_standardizer(splits['X_val'],mean,std)
+    X_test = apply_standardizer(splits['X_test'],mean,std)
+
+    std_splits = {
+        'X_train': X_train,
+        'y_train': splits['y_train'],
+        'X_val': X_val,
+        'y_val': splits['y_val'],
+        'X_test': X_test,
+        'y_test': splits['y_test']
+    }
+
+    return std_splits,mean,std
 
 # Step 23 - evaluate_predictions (not yet solved)
 # TODO: implement
