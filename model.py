@@ -221,6 +221,9 @@ def standardize_and_add_bias(splits):
     X_val = apply_standardizer(splits['X_val'],mean,std)
     X_test = apply_standardizer(splits['X_test'],mean,std)
 
+    X_train = add_bias_column(X_train)
+    X_val = add_bias_column(X_val)
+    X_test = add_bias_column(X_test)
     std_splits = {
         'X_train': X_train,
         'y_train': splits['y_train'],
