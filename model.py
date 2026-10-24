@@ -183,8 +183,17 @@ def prepare_cleaned_features(X, iqr_k=1.5):
     X_cleaned = clip_columns(X_imputed,lower_bounds,upper_bounds)
     return X_cleaned
 
-# Step 20 - assemble_feature_matrix (not yet solved)
-# TODO: implement
+# Step 20 - assemble_feature_matrix
+def assemble_feature_matrix(X_num, ratio_num_idx, ratio_den_idx, cat_labels=None):
+    # TODO: build an extended feature matrix by appending a derived ratio...
+    numerator = X_num[:,ratio_num_idx]
+    denominator =X_num[:,ratio_den_idx]
+    ratio_feature = make_ratio_feature(numerator,denominator)
+    X = append_column(X_num,ratio_feature)
+    if cat_labels is not None:
+        cat_block = one_hot_encode(cat_labels)
+        X = np.hstack((X,cat_block))
+    return X
 
 # Step 21 - make_train_val_test (not yet solved)
 # TODO: implement
